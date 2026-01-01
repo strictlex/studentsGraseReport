@@ -11,11 +11,12 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class ReadAllFiles {
-    public static ArrayList readAllFiles(String folderPath) throws IOException {
+    public static Map readAllFiles(String folderPath) throws IOException {
         File folder = new File(folderPath);
         String regex = "[А-Яа-яёЁ]*\\s[А-Яа-яёЁ]*\\s[А-Яа-яёЁ]*.txt"; // Переменная на проверку правильности имени файла
-                                                                // студента
-        ArrayList<Map> trueList = new ArrayList<>();
+                                                                      // студента
+
+        Map<String, Map> nameGrades = new LinkedHashMap<>();
 
         // Проверка существует ли папка
         if (!folder.exists()) {
@@ -41,20 +42,21 @@ public class ReadAllFiles {
             System.out.println("Папка: " + folder + " пуста!");
             return null;
         }
-        
+
         // Все имена файлов папки заносим в массив
         for (File file : files) {
             String name = file.getName();
             if (name.matches(regex)) { // Проверяем правильность названия файла через регулярку и отправляем файл на
                                        // обработку
                 Map<String, Integer> studentGrade = makeMapStudentGrade(file);
-                if (studentGrade != null && !studentGrade.isEmpty()) { // Если вернулся не пустой словарь то добавляем в список словарей
-
-                    trueList.add(studentGrade);
+                if (studentGrade != null && !studentGrade.isEmpty()) { // Если вернулся не пустой словарь то добавляем в
+                                                                       // список словарей
+                    name = name.replace(".txt", "");
+                    nameGrades.put(name, studentGrade);
                 }
             }
         }
-        return trueList;
+        return nameGrades;
     }
 
     public static Map makeMapStudentGrade(File file) throws IOException {
@@ -68,7 +70,7 @@ public class ReadAllFiles {
 
         // считываем файл студента
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            
+
             while ((line = br.readLine()) != null) { // когда строка пуста цикл завершается
                 stringFile.add(line);
             }
@@ -78,9 +80,11 @@ public class ReadAllFiles {
             // br.close();
         }
 
-        /*  проверка списка строк файла
-            если хоть одна строка не удовлетворяет условию - метод возвращает пустой
-            словарь */
+        /*
+         * проверка списка строк файла
+         * если хоть одна строка не удовлетворяет условию - метод возвращает пустой
+         * словарь
+         */
         for (String string : stringFile) {
             if (!string.matches(regex)) {
                 return student;
@@ -89,13 +93,13 @@ public class ReadAllFiles {
 
         Pattern pattern = Pattern.compile(regex);
 
-        //добавляем элементы в словарь ключ(предмет):значение(оценка)
+        // добавляем элементы в словарь ключ(предмет):значение(оценка)
         for (String string : stringFile) {
             Matcher matcher = pattern.matcher(string);
-            if (matcher.find()){
-            String keyString = matcher.group(1);
-            int valueString = Integer.parseInt(matcher.group(2));
-            student.put(keyString, valueString);
+            if (matcher.find()) {
+                String keyString = matcher.group(1);
+                int valueString = Integer.parseInt(matcher.group(2));
+                student.put(keyString, valueString);
             }
         }
 

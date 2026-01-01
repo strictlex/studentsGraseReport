@@ -8,21 +8,24 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.example.readFiles.DataProcessing;
 import com.example.readFiles.ReadAllFiles;
 
 public class grade {
     public static void main(String[] args) {
-        File report = new File("Отчет.txt");
+        String report = "Отчет.txt";
         String filePath = "/Users/aleksey/Documents/java_projects/grade_students/grade_students/src/studentsFile";
-        ArrayList<Map> listStudentsGrades = null;
-        // listStudentsGrades = readAllFiles(filePath);
+        Map<String, Map> mapStudentsSubjectsGrades = null;
         ReadAllFiles rAF = new ReadAllFiles();
         try {
-            listStudentsGrades = rAF.readAllFiles(filePath);
+            mapStudentsSubjectsGrades = rAF.readAllFiles(filePath);
         } catch (IOException e) {
             System.out.println("Error: " + e);
         }
 
-        System.out.println(listStudentsGrades);
+        DataProcessing dp = new DataProcessing();
+        dp.dataFiles(mapStudentsSubjectsGrades, report);
+
     }
 }
