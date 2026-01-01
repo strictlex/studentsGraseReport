@@ -3,6 +3,7 @@ package com.example.readFiles;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ public class DataProcessing {
     public static void dataFiles(Map stringMap, String nameFile) {
         int cntStudents = stringMap.size();
         Map<String, Map> nameSubjectsGrades = stringMap;
-        Map<String, Integer> avgGradesToSubjects = new LinkedHashMap<>();
+        // Map<String, Integer> avgGradesToSubjects = new LinkedHashMap<>();
         String bestStudent = null;
         String worstStudent = null;
         Double maxAvgGrade = 0.0;
@@ -46,12 +47,22 @@ public class DataProcessing {
             }
         }
 
+        Map<String, ArrayList<Integer>> subjectsGradesMapList = createVars(nameSubjectsGrades);
+
         try {
             File file = new File(nameFile);
             if (!file.exists()) {
                 file.createNewFile();
             }
             PrintWriter pw = new PrintWriter(file);
+            for (String sub : subjectsGradesMapList.keySet()) {
+                ArrayList<Integer> gradeList = subjectsGradesMapList.get(sub);
+                String line = sub + " - " + sumAvg(gradeList);
+                pw.println(line);
+                System.out.println(line);
+            }
+            pw.println();
+            System.out.println();
             pw.println("Лучший ученик:");
             System.out.println("Лучший ученик:");
             pw.println(bestStudent + " средний балл - " + maxAvgGrade);
@@ -73,5 +84,34 @@ public class DataProcessing {
             System.out.println("Error: " + e);
         }
 
+    }
+
+    // метод для создания предмет: массив оценок
+    public static Map<String, ArrayList<Integer>> createVars(Map<String, Map> mapName) {
+        Map<String, ArrayList<Integer>> subjectsListGrade = new HashMap<>();
+        ArrayList<Integer> gradesList = new ArrayList<>();
+
+        for (String name : mapName.keySet()) {
+            Map<String, Integer> subjectGrade = mapName.get(name);
+            for (String sub : subjectGrade.keySet()) {
+                Integer grade = subjectGrade.get(sub);
+                subjectsListGrade.putIfAbsent(sub, new ArrayList<>());
+                subjectsListGrade.get(sub).add(grade);
+
+            }
+        }
+
+        return subjectsListGrade;
+
+    }
+
+    public static double sumAvg(ArrayList<Integer> listName) {
+        ArrayList<Integer> list = listName;
+        int len = listName.size();
+        int sum = 0;
+        for (Integer i : list) {
+            sum += i;
+        }
+        return (double) (sum / len);
     }
 }

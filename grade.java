@@ -14,8 +14,13 @@ import com.example.readFiles.ReadAllFiles;
 
 public class grade {
     public static void main(String[] args) {
-        String report = "Отчет.txt";
-        String filePath = "/Users/aleksey/Documents/java_projects/grade_students/grade_students/src/studentsFile";
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Введите имя файла для отчета, например: \"Отчет.txt\"");
+        String report = sc.nextLine();
+        System.out.println(
+                "Введите путь расположения папки с файлами студентов, например: \"/Users/aleksey/Documents/java_projects/grade_students/grade_students/src/studentsFile\" - для Mac/Linux");
+        System.out.println("\"c:\\grade_students\\src\\studentsFile\" - для Windows");
+        String filePath = sc.nextLine();
         Map<String, Map> mapStudentsSubjectsGrades = null;
         ReadAllFiles rAF = new ReadAllFiles();
         try {

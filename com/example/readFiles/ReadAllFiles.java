@@ -13,8 +13,13 @@ import java.util.regex.Matcher;
 public class ReadAllFiles {
     public static Map readAllFiles(String folderPath) throws IOException {
         File folder = new File(folderPath);
-        String regex = "[А-Яа-яёЁ]*\\s[А-Яа-яёЁ]*\\s[А-Яа-яёЁ]*.txt"; // Переменная на проверку правильности имени файла
-                                                                      // студента
+        String regex = "^[А-Яа-яёЁ]+(?:-[А-Яа-яёЁ]+){0,2}\\s[А-Яа-яёЁ]+(?:-[А-Яа-яёЁ]+){0,2}\\s[А-Яа-яёЁ]+(?:-[А-Яа-яёЁ]+){0,2}.txt"; // Переменная
+                                                                                                                                      // на
+                                                                                                                                      // проверку
+                                                                                                                                      // правильности
+                                                                                                                                      // имени
+                                                                                                                                      // файла
+        // студента
 
         Map<String, Map> nameGrades = new LinkedHashMap<>();
 
@@ -62,9 +67,7 @@ public class ReadAllFiles {
     public static Map makeMapStudentGrade(File file) throws IOException {
 
         Map<String, Integer> student = new LinkedHashMap<>();
-        // File file = new File(fileName);
         String line;
-        // BufferedReader br = null;
         ArrayList<String> stringFile = new ArrayList<>();
         String regex = new String("([А-Яа-яёЁ]*)\\s*[-]\\s*([1-5])");
 
@@ -76,8 +79,6 @@ public class ReadAllFiles {
             }
         } catch (IOException e) {
             System.out.println("Error: " + e);
-        } finally {
-            // br.close();
         }
 
         /*
